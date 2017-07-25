@@ -103,6 +103,21 @@
     }
 
     /**
+     * getFlagSetting($flag)
+     * Retrieves the current setting of the bit associated with the flag. Returns
+     * null if flag does not exist.
+     *
+     * @param $flag string
+     * @return mixed
+     */
+    public function getFlagSetting($flag){
+      if (isset($this->flagsArr[$flag])){
+        return (($this->flagsArr[$flag] & $this->flagsInt) == $this->flagsArr[$flag]) ? true : false;
+      }
+      return null;
+    }
+
+    /**
      * toggleFlag($flag)
      * Flips the bit associated with the specified Flag. Returns true on success,
      * false if flag does not exist.

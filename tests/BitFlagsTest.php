@@ -101,6 +101,18 @@
       $this->assertTrue($BF->setCompressedFlags(21));
     }
 
+    public function testGetFlagSettingWhenFlagExists(){
+      $BF = new BitFlags($this->buildFlagArray(5));
+      $this->assertTrue($BF->getFlagSetting("FLAG_0"));
+      $BF->toggleFlag("FLAG_0");
+      $this->assertFalse($BF->getFlagSetting("FLAG_0"));
+    }
+
+    public function testGetFlagSettingReturnsNullWhenFlagDoesNotExist(){
+      $BF = new BitFlags($this->buildFlagArray(4));
+      $this->assertNull($BF->getFlagSetting("NON_EXISTANT_FLAG"));
+    }
+
     // PRIVATE //===============================================================
     private function getIntVal($flagArray){
       $counter = 0;
