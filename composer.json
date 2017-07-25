@@ -1,0 +1,10 @@
+{
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "name": "mdeschermeier/bitflags",
+    "autoload": {
+        "psr-4": {
+            "mdeschermeier\\bitflags\\": "src"
+        }
+    }
+}

@@ -1,12 +1,9 @@
 <?php
-  require_once "../src/BitFlags.php";
+  require_once "src/BitFlags.php";
 
   use PHPUnit\Framework\TestCase;
   use mdeschermeier\bitflags\BitFlags;
 
-  /**
-   * @covers BitFlags
-   */
   class BitFlagsTest extends TestCase{
     private $max_size;
 

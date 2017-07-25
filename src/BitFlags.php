@@ -53,7 +53,10 @@
      */
     public function getFlagPosition($flag){
       if (isset($this->flagsArr[$flag])){
+
+        // @codeCoverageIgnoreStart
         return $this->flagsArr[$flag];
+         // @codeCoverageIgnoreEnd
       }
       return false;
     }
