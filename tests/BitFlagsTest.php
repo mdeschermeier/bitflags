@@ -19,69 +19,86 @@
     }
 
     public function testMaxLengthFlagArraysCompressCorrectly(){
-      $FC = new BitFlags($this->buildFlagArray($this->max_size));
+      $BF = new BitFlags($this->buildFlagArray($this->max_size));
 
-      $this->assertEquals(9223372036854775807, $FC->getCompressedFlags());
+      $this->assertEquals(9223372036854775807, $BF->getCompressedFlags());
     }
 
     public function testSetFlagsCorrectlySetsAllFlags(){
       for ($i = 0; $i < 1000; $i++){
-        $FC = new BitFlags();
+        $BF = new BitFlags();
         $tArray = $this->buildFlagArray(10, true);
-        $FC->setFlags($tArray);
-        $this->assertEquals($this->getIntVal($tArray), $FC->getCompressedFlags());
+        $BF->setFlags($tArray);
+        $this->assertEquals($this->getIntVal($tArray), $BF->getCompressedFlags());
       }
     }
 
     public function testToggleFlagCorrectlyFlipsBitsWhenFlagsAreSet(){
       $tArray = $this->buildFlagArray(8, true);
-      $FC = new BitFlags($tArray);
+      $BF = new BitFlags($tArray);
       for ($i = 0; $i < 1000; $i++){
         $flip = "FLAG_".(mt_rand() % 7);
         $tArray[$flip] = $tArray[$flip] ? false : true;
-        $FC->toggleFlag($flip);
-        $this->assertEquals($this->getIntVal($tArray), $FC->getCompressedFlags());
+        $BF->toggleFlag($flip);
+        $this->assertEquals($this->getIntVal($tArray), $BF->getCompressedFlags());
       }
 
     }
 
     public function testToggleFlagReturnsFalseWhenFlagNameDoesNotExist(){
       $exists = $this->buildFlagArray(10);
-      $FC = new BitFlags($exists);
+      $BF = new BitFlags($exists);
 
-      $this->assertFalse($FC->toggleFlag("NOT_REAL"));
-      $this->assertFalse($FC->toggleFlag("ALSO_NOT_SET"));
-      $this->assertFalse($FC->toggleFlag("FLAG_10"));
+      $this->assertFalse($BF->toggleFlag("NOT_REAL"));
+      $this->assertFalse($BF->toggleFlag("ALSO_NOT_SET"));
+      $this->assertFalse($BF->toggleFlag("FLAG_10"));
     }
 
     public function testEnableAllFlagsEnablesAllFlags(){
       for ($i = 0; $i < 1000; $i++){
         $randFlags = $this->buildFlagArray((mt_rand() % $this->max_size), true);
-        $FC = new BitFlags($randFlags);
+        $BF = new BitFlags($randFlags);
         foreach($randFlags as $flag => $val){
           $randFlags[$flag] = true;
         }
-        $FC->enableAllFlags();
-        $this->assertEquals($this->getIntVal($randFlags), $FC->getCompressedFlags());
+        $BF->enableAllFlags();
+        $this->assertEquals($this->getIntVal($randFlags), $BF->getCompressedFlags());
       }
     }
 
     public function testDisableAllFlagsDisablesAllFlags(){
       for ($i = 0; $i < 1000; $i++){
         $randFlags = $this->buildFlagArray((mt_rand() % $this->max_size), true);
-        $FC = new BitFlags($randFlags);
-        $FC->disableAllFlags();
-        $this->assertEquals(0, $FC->getCompressedFlags());
+        $BF = new BitFlags($randFlags);
+        $BF->disableAllFlags();
+        $this->assertEquals(0, $BF->getCompressedFlags());
       }
     }
 
     public function testGetFlagPositionReturnsFalseIfFlagDoesNotExist(){
       $exists = $this->buildFlagArray(5);
-      $FC = new BitFlags($exists);
+      $BF = new BitFlags($exists);
 
-      $this->assertFalse($FC->getFlagPosition("NOT_A_FLAG"));
-      $this->assertFalse($FC->getFlagPosition("THIS_DOES_NOT_EXIST"));
-      $this->assertFalse($FC->getFlagPosition("BOOP"));
+      $this->assertFalse($BF->getFlagPosition("NOT_A_FLAG"));
+      $this->assertFalse($BF->getFlagPosition("THIS_DOES_NOT_EXIST"));
+      $this->assertFalse($BF->getFlagPosition("BOOP"));
+    }
+
+    public function testSetCompressedFlagsReturnsFalseIfNumberTooLarge(){
+      $num = pow(2,64)-5000;
+      $BF = new BitFlags();
+      $this->assertFalse($BF->setCompressedFlags($num));
+    }
+
+    public function testSetCompressedFlagsReturnsFalseIfNumberLessThanZero(){
+      $num = -5000;
+      $BF = new BitFlags();
+      $this->assertFalse($BF->setCompressedFlags($num));
+    }
+
+    public function testSetCompressedFlagsReturnsTrueIfNumberValid(){
+      $BF = new BitFlags();
+      $this->assertTrue($BF->setCompressedFlags(21));
     }
 
     // PRIVATE //===============================================================

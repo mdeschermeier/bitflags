@@ -23,6 +23,7 @@
       $this->shiftCount = 0;
       $this->flagsArr = [];
       $this->setMaxArraySize();
+      $this->setMaxIntSize();
 
       if (!empty($initFlagArray)){
         $this->setFlags($initFlagArray);
@@ -32,6 +33,22 @@
     }
 
     // PUBLIC //================================================================
+
+    /**
+     * setCompressedFlags($flagInt)
+     * Sets the compressed flag integer value.
+     *
+     * @return boolean
+     * @codeCoverageIgnore
+     */
+    public function setCompressedFlags($flagInt){
+       if (getType($flagInt) == 'integer' && $flagInt >= 0){
+         $this->flagsInt = $flagInt;
+         return true;
+       }
+       return false;
+    }
+
 
     /**
      * getCompressedFlags()
@@ -136,7 +153,18 @@
       $this->maxArraySize = (PHP_INT_SIZE === 8) ? 63 : 31;
     }
 
-
+    /**
+     * setMaxIntSize()
+     * Sets maximum Integer size for compressed flags, based on system architecture.
+     * @codeCoverageIgnore
+     */
+    private function setMaxIntSize(){
+      $b = '0';
+      for ($i = 0; $i < $this->maxArraySize; $i++){
+        $b .= '1';
+      }
+      $this->maxIntSize = bindec($b);
+    }
 
   }
 
